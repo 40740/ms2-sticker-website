@@ -5,10 +5,9 @@ set -e
 
 echo "Starting Laravel application on Render (SQLite)..."
 
-# 1. Generate APP_KEY if empty
-if [ -z "$APP_KEY" ]; then
-    php artisan key:generate --no-interaction --force
-fi
+# 1. Generate APP_KEY (always regenerate to ensure correct format)
+# Render's generateValue may produce keys incompatible with Laravel's cipher
+php artisan key:generate --no-interaction --force
 
 # 2. Create storage directories (Render uses ephemeral filesystem)
 mkdir -p storage/{app/public,framework/{cache,sessions,views},logs}
