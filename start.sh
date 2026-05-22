@@ -5,9 +5,8 @@ set -e
 
 echo "Starting Laravel application on Render (SQLite)..."
 
-# 1. Generate APP_KEY (always regenerate to ensure correct format)
-# Render's generateValue may produce keys incompatible with Laravel's cipher
-php artisan key:generate --no-interaction --force
+# 1. APP_KEY is provided via Render environment variable (render.yaml)
+#    No need to run key:generate — it requires a .env file which doesn't exist in Docker
 
 # 2. Create storage directories (Render uses ephemeral filesystem)
 mkdir -p storage/{app/public,framework/{cache,sessions,views},logs}

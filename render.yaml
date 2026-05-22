@@ -15,7 +15,7 @@ services:
       - key: APP_DEBUG
         value: "false"
       - key: APP_KEY
-        value: "base64:placeholder-replaced-by-key-generate"
+        value: "base64:/iR6qD6YYeFv/ChxWsMxISna/6aTG51BqctLA+in2S0="
       - key: APP_URL
         value: https://ms2-sticker-website.onrender.com
       - key: DB_CONNECTION
