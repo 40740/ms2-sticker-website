@@ -38,6 +38,7 @@ services:
         fromDatabase:
           name: ms2-db
           property: database
+        value: postgres
       - key: DB_USERNAME
         fromDatabase:
           name: ms2-db
@@ -61,5 +62,4 @@ services:
   - type: pserv
     name: ms2-db
     plan: free
-    databaseName: ms2_production
     region: oregon
