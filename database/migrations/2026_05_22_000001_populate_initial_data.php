@@ -8,17 +8,22 @@ return new class extends Migration
     /**
      * Populate initial data from local SQLite database.
      * Generated: 2026-05-22 16:44:14
-     * Total records: 364
+     * Total records: 364 (58 settings, 36 categories, 182 products, 65 FAQs, 5 blog posts, 8 certificates, 6 brands, 4 team members)
      *
-     * Uses insertOrIgnore() for idempotency - safe to run multiple times.
+     * Strategy: TRUNCATE all tables first, then INSERT fresh data.
+     * This ensures a clean slate regardless of any pre-existing data (old seeders, previous deploys, etc.).
+     * Safe to run multiple times - always results in the same clean dataset.
      */
     public function up(): void
     {
-        // insertOrIgnore is inherently idempotent - skips records with existing PKs
-        // This safely runs on both fresh and existing databases
+        // ─── STEP 1: Wipe all data tables clean ──────────────────
+        // TRUNCATE resets auto-increment and removes ALL rows.
+        // CASCADE handles foreign key dependencies (PostgreSQL).
+        // Order matters: truncate dependent tables first, then parent tables.
+        \DB::statement('TRUNCATE TABLE team_members, brands, certificates, blog_posts, faqs, products, categories, settings CASCADE');
 
         // --- settings (58 records) ---
-        \DB::table('settings')->insertOrIgnore([
+        \DB::table('settings')->insert([
             'id' => 1,
             'key' => "site_name",
             'value' => "MeisaiPrinting",
@@ -27,7 +32,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:17",
         ]);
 
-        \DB::table('settings')->insertOrIgnore([
+        \DB::table('settings')->insert([
             'id' => 2,
             'key' => "site_logo",
             'value' => "/uploads/settings/logo_1779275915.png",
@@ -36,7 +41,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 11:18:35",
         ]);
 
-        \DB::table('settings')->insertOrIgnore([
+        \DB::table('settings')->insert([
             'id' => 3,
             'key' => "site_description",
             'value' => "Custom Stickers & Labels for Business",
@@ -45,7 +50,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:17",
         ]);
 
-        \DB::table('settings')->insertOrIgnore([
+        \DB::table('settings')->insert([
             'id' => 4,
             'key' => "hero_title",
             'value' => "Custom Stickers & Labels for Business",
@@ -54,7 +59,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:17",
         ]);
 
-        \DB::table('settings')->insertOrIgnore([
+        \DB::table('settings')->insert([
             'id' => 5,
             'key' => "hero_subtitle",
             'value' => "24 years of experience in custom stickers and labels",
@@ -63,7 +68,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:18",
         ]);
 
-        \DB::table('settings')->insertOrIgnore([
+        \DB::table('settings')->insert([
             'id' => 6,
             'key' => "hero_cta_text",
             'value' => "Get Free Quote",
@@ -72,7 +77,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:20",
         ]);
 
-        \DB::table('settings')->insertOrIgnore([
+        \DB::table('settings')->insert([
             'id' => 7,
             'key' => "hero_cta_link",
             'value' => "#quote-form",
@@ -81,7 +86,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:20",
         ]);
 
-        \DB::table('settings')->insertOrIgnore([
+        \DB::table('settings')->insert([
             'id' => 8,
             'key' => "footer_about",
             'value' => "24 Years Focused on Adhesive Stickers",
@@ -90,7 +95,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:20",
         ]);
 
-        \DB::table('settings')->insertOrIgnore([
+        \DB::table('settings')->insert([
             'id' => 9,
             'key' => "footer_email",
             'value' => "info@meisaiprinting.com",
@@ -99,7 +104,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:20",
         ]);
 
-        \DB::table('settings')->insertOrIgnore([
+        \DB::table('settings')->insert([
             'id' => 10,
             'key' => "footer_phone",
             'value' => "+86-755-1234-5678",
@@ -108,7 +113,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:20",
         ]);
 
-        \DB::table('settings')->insertOrIgnore([
+        \DB::table('settings')->insert([
             'id' => 11,
             'key' => "footer_address",
             'value' => "Shenzhen, Guangdong, China",
@@ -117,7 +122,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:21",
         ]);
 
-        \DB::table('settings')->insertOrIgnore([
+        \DB::table('settings')->insert([
             'id' => 12,
             'key' => "contact_email",
             'value' => "lili@meisaiprinting.com",
@@ -126,7 +131,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 03:01:27",
         ]);
 
-        \DB::table('settings')->insertOrIgnore([
+        \DB::table('settings')->insert([
             'id' => 13,
             'key' => "contact_phone",
             'value' => "+86-1888888888",
@@ -135,7 +140,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 03:01:28",
         ]);
 
-        \DB::table('settings')->insertOrIgnore([
+        \DB::table('settings')->insert([
             'id' => 14,
             'key' => "contact_address",
             'value' => "zhonshan, Guangdong, China",
@@ -144,7 +149,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 03:01:28",
         ]);
 
-        \DB::table('settings')->insertOrIgnore([
+        \DB::table('settings')->insert([
             'id' => 15,
             'key' => "social_facebook",
             'value' => "#",
@@ -153,7 +158,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:21",
         ]);
 
-        \DB::table('settings')->insertOrIgnore([
+        \DB::table('settings')->insert([
             'id' => 16,
             'key' => "social_instagram",
             'value' => "#",
@@ -162,7 +167,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:21",
         ]);
 
-        \DB::table('settings')->insertOrIgnore([
+        \DB::table('settings')->insert([
             'id' => 17,
             'key' => "social_youtube",
             'value' => "#",
@@ -171,7 +176,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:21",
         ]);
 
-        \DB::table('settings')->insertOrIgnore([
+        \DB::table('settings')->insert([
             'id' => 18,
             'key' => "social_tiktok",
             'value' => "#",
@@ -180,7 +185,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:22",
         ]);
 
-        \DB::table('settings')->insertOrIgnore([
+        \DB::table('settings')->insert([
             'id' => 19,
             'key' => "about_story_title",
             'value' => "Our Story",
@@ -189,7 +194,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:22",
         ]);
 
-        \DB::table('settings')->insertOrIgnore([
+        \DB::table('settings')->insert([
             'id' => 20,
             'key' => "about_story_content",
             'value' => "Founded in 2000, MeisaiPrinting has grown from a small workshop in Shenzhen to one of China's leading custom sticker and label manufacturers. Our journey began with a simple belief: every business deserves high-quality, affordable custom stickers that make their brand stand out.\r\n\r\nOver the past 24 years, we have served more than 10,000 businesses across 50+ countries, delivering billions of stickers and labels that help brands communicate, protect, and promote their products. Our state-of-the-art factory spans over 10,000 square meters and is equipped with the latest printing technology.\r\n\r\nWhat sets us apart is our unwavering commitment to quality and customer satisfaction. We invest heavily in research and development, continuously improving our materials, printing techniques, and production processes to deliver stickers and labels that exceed expectations.",
@@ -198,7 +203,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 02:33:33",
         ]);
 
-        \DB::table('settings')->insertOrIgnore([
+        \DB::table('settings')->insert([
             'id' => 21,
             'key' => "about_values_title",
             'value' => "Our Values",
@@ -207,7 +212,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:22",
         ]);
 
-        \DB::table('settings')->insertOrIgnore([
+        \DB::table('settings')->insert([
             'id' => 22,
             'key' => "about_values_content",
             'value' => "1. Quality First: We never compromise on the quality of our materials or printing. Every sticker and label must meet our rigorous standards before it leaves our factory.\r\n\r\n2. Customer-Centric: Your success is our success. We listen to your needs and go above and beyond to deliver solutions that work for your business.\r\n\r\n3. Innovation: We continuously invest in new technologies, materials, and techniques to stay at the forefront of the sticker and label industry.\r\n\r\n4. Integrity: We believe in honest, transparent business practices. What we promise is what we deliver.\r\n\r\n5. Sustainability: We are committed to environmentally responsible manufacturing, using eco-friendly materials and sustainable processes wherever possible.",
@@ -216,7 +221,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:58:32",
         ]);
 
-        \DB::table('settings')->insertOrIgnore([
+        \DB::table('settings')->insert([
             'id' => 23,
             'key' => "about_vision_title",
             'value' => "Our Vision",
@@ -225,7 +230,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:22",
         ]);
 
-        \DB::table('settings')->insertOrIgnore([
+        \DB::table('settings')->insert([
             'id' => 24,
             'key' => "about_vision_content",
             'value' => "To be the world's most trusted and innovative custom sticker and label manufacturer, empowering businesses of all sizes to build their brands through exceptional printed products.",
@@ -234,7 +239,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:23",
         ]);
 
-        \DB::table('settings')->insertOrIgnore([
+        \DB::table('settings')->insert([
             'id' => 25,
             'key' => "about_mission_title",
             'value' => "Our Mission",
@@ -243,7 +248,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:23",
         ]);
 
-        \DB::table('settings')->insertOrIgnore([
+        \DB::table('settings')->insert([
             'id' => 26,
             'key' => "about_mission_content",
             'value' => "1. Deliver premium quality custom stickers and labels at competitive prices through efficient manufacturing and direct-to-customer service.\r\n\r\n2. Provide exceptional customer experiences through responsive communication, expert guidance, and reliable delivery.\r\n\r\n3. Drive industry innovation by investing in cutting-edge technology and sustainable manufacturing practices.",
@@ -252,7 +257,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:58:32",
         ]);
 
-        \DB::table('settings')->insertOrIgnore([
+        \DB::table('settings')->insert([
             'id' => 27,
             'key' => "about_identity_title",
             'value' => "Our Identity",
@@ -261,7 +266,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:23",
         ]);
 
-        \DB::table('settings')->insertOrIgnore([
+        \DB::table('settings')->insert([
             'id' => 28,
             'key' => "about_identity_content",
             'value' => "We serve startups, small businesses, and global brands alike. Whether you're a craft brewer needing bottle labels, an e-commerce brand wanting custom packaging stickers, or a Fortune 500 company requiring industrial-grade product labels, Funstickers has the expertise and capacity to meet your needs. Our clients span industries including food & beverage, cosmetics, pharmaceuticals, consumer electronics, and retail.",
@@ -270,7 +275,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:23",
         ]);
 
-        \DB::table('settings')->insertOrIgnore([
+        \DB::table('settings')->insert([
             'id' => 29,
             'key' => "factory_title",
             'value' => "About Our Factory",
@@ -279,7 +284,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:23",
         ]);
 
-        \DB::table('settings')->insertOrIgnore([
+        \DB::table('settings')->insert([
             'id' => 30,
             'key' => "factory_content",
             'value' => "Our 10,000+ square meter factory in Shenzhen, China, has been the heart of Funstickers since 2000. Equipped with state-of-the-art flexographic, digital, and offset printing presses, we can handle orders from as few as 100 to millions of stickers with equal precision and care.\r\n\r\nThe facility houses dedicated production lines for die-cut stickers, kiss-cut stickers, sticker rolls, sticker sheets, and all types of labels. Our quality control department uses advanced inspection systems to ensure every batch meets international standards.\r\n\r\nWe hold certifications including BSCI, ISO 9001, REACH, and FSC, demonstrating our commitment to quality management, social responsibility, and environmental sustainability. Our factory operates under strict 5S management principles, ensuring efficiency, safety, and cleanliness throughout the production process.",
@@ -288,7 +293,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:58:32",
         ]);
 
-        \DB::table('settings')->insertOrIgnore([
+        \DB::table('settings')->insert([
             'id' => 31,
             'key' => "site_title",
             'value' => null,
@@ -297,7 +302,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:58:31",
         ]);
 
-        \DB::table('settings')->insertOrIgnore([
+        \DB::table('settings')->insert([
             'id' => 32,
             'key' => "site_keywords",
             'value' => null,
@@ -306,7 +311,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:58:31",
         ]);
 
-        \DB::table('settings')->insertOrIgnore([
+        \DB::table('settings')->insert([
             'id' => 33,
             'key' => "hero_1_enabled",
             'value' => "1",
@@ -315,7 +320,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:57:41",
         ]);
 
-        \DB::table('settings')->insertOrIgnore([
+        \DB::table('settings')->insert([
             'id' => 34,
             'key' => "hero_1_title",
             'value' => null,
@@ -324,7 +329,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 02:28:56",
         ]);
 
-        \DB::table('settings')->insertOrIgnore([
+        \DB::table('settings')->insert([
             'id' => 35,
             'key' => "hero_1_subtitle",
             'value' => null,
@@ -333,7 +338,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 02:28:56",
         ]);
 
-        \DB::table('settings')->insertOrIgnore([
+        \DB::table('settings')->insert([
             'id' => 36,
             'key' => "hero_1_cta_text",
             'value' => "Get Free Quote",
@@ -342,7 +347,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:57:41",
         ]);
 
-        \DB::table('settings')->insertOrIgnore([
+        \DB::table('settings')->insert([
             'id' => 37,
             'key' => "hero_1_cta_link",
             'value' => "#quote-form",
@@ -351,7 +356,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:57:41",
         ]);
 
-        \DB::table('settings')->insertOrIgnore([
+        \DB::table('settings')->insert([
             'id' => 38,
             'key' => "hero_1_image",
             'value' => "/uploads/settings/hero_1_image_1779275934.png",
@@ -360,7 +365,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 11:18:54",
         ]);
 
-        \DB::table('settings')->insertOrIgnore([
+        \DB::table('settings')->insert([
             'id' => 39,
             'key' => "hero_2_enabled",
             'value' => "1",
@@ -369,7 +374,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:57:42",
         ]);
 
-        \DB::table('settings')->insertOrIgnore([
+        \DB::table('settings')->insert([
             'id' => 40,
             'key' => "hero_2_title",
             'value' => "Premium Custom Labels",
@@ -378,7 +383,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:57:42",
         ]);
 
-        \DB::table('settings')->insertOrIgnore([
+        \DB::table('settings')->insert([
             'id' => 41,
             'key' => "hero_2_subtitle",
             'value' => "FSC, UL, CSA Certified · Factory Direct Pricing",
@@ -387,7 +392,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:57:42",
         ]);
 
-        \DB::table('settings')->insertOrIgnore([
+        \DB::table('settings')->insert([
             'id' => 42,
             'key' => "hero_2_cta_text",
             'value' => "Get Free Quote",
@@ -396,7 +401,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:57:42",
         ]);
 
-        \DB::table('settings')->insertOrIgnore([
+        \DB::table('settings')->insert([
             'id' => 43,
             'key' => "hero_2_cta_link",
             'value' => "#quote-form",
@@ -405,7 +410,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:57:42",
         ]);
 
-        \DB::table('settings')->insertOrIgnore([
+        \DB::table('settings')->insert([
             'id' => 44,
             'key' => "hero_2_image",
             'value' => "/images/hero-2.jpg",
@@ -414,7 +419,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:57:42",
         ]);
 
-        \DB::table('settings')->insertOrIgnore([
+        \DB::table('settings')->insert([
             'id' => 45,
             'key' => "hero_3_enabled",
             'value' => "0",
@@ -423,7 +428,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 02:29:20",
         ]);
 
-        \DB::table('settings')->insertOrIgnore([
+        \DB::table('settings')->insert([
             'id' => 46,
             'key' => "hero_3_title",
             'value' => "Fast Turnaround & Delivery",
@@ -432,7 +437,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:57:43",
         ]);
 
-        \DB::table('settings')->insertOrIgnore([
+        \DB::table('settings')->insert([
             'id' => 47,
             'key' => "hero_3_subtitle",
             'value' => "From Design to Your Doorstep",
@@ -441,7 +446,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:57:43",
         ]);
 
-        \DB::table('settings')->insertOrIgnore([
+        \DB::table('settings')->insert([
             'id' => 48,
             'key' => "hero_3_cta_text",
             'value' => "Get Free Quote",
@@ -450,7 +455,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:57:43",
         ]);
 
-        \DB::table('settings')->insertOrIgnore([
+        \DB::table('settings')->insert([
             'id' => 49,
             'key' => "hero_3_cta_link",
             'value' => "#quote-form",
@@ -459,7 +464,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:57:43",
         ]);
 
-        \DB::table('settings')->insertOrIgnore([
+        \DB::table('settings')->insert([
             'id' => 50,
             'key' => "hero_3_image",
             'value' => "/images/hero-3.jpg",
@@ -468,7 +473,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:57:43",
         ]);
 
-        \DB::table('settings')->insertOrIgnore([
+        \DB::table('settings')->insert([
             'id' => 51,
             'key' => "expertise_title",
             'value' => "Expertise Is More Than Just Words",
@@ -477,7 +482,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:57:44",
         ]);
 
-        \DB::table('settings')->insertOrIgnore([
+        \DB::table('settings')->insert([
             'id' => 52,
             'key' => "expertise_content",
             'value' => "With over 24 years of experience in custom sticker and label manufacturing, Funstickers has built a reputation for delivering high-quality products at competitive prices. Our state-of-the-art facility and dedicated team ensure every order meets the highest standards.\r\n\r\nFrom small businesses to global brands, we've helped thousands of clients bring their vision to life through custom adhesive solutions. Our FSC, UL, and CSA certifications are a testament to our commitment to quality and sustainability.",
@@ -486,7 +491,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:58:32",
         ]);
 
-        \DB::table('settings')->insertOrIgnore([
+        \DB::table('settings')->insert([
             'id' => 53,
             'key' => "expertise_button_text",
             'value' => "More About Us",
@@ -495,7 +500,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:57:44",
         ]);
 
-        \DB::table('settings')->insertOrIgnore([
+        \DB::table('settings')->insert([
             'id' => 54,
             'key' => "expertise_button_link",
             'value' => "/pages/funstickers",
@@ -504,7 +509,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:57:44",
         ]);
 
-        \DB::table('settings')->insertOrIgnore([
+        \DB::table('settings')->insert([
             'id' => 55,
             'key' => "expertise_video_url",
             'value' => "https://www.youtube.com/watch?v=Ehv1-8-5JzA",
@@ -513,7 +518,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 01:56:43",
         ]);
 
-        \DB::table('settings')->insertOrIgnore([
+        \DB::table('settings')->insert([
             'id' => 56,
             'key' => "factory_video_url",
             'value' => "https://www.youtube.com/watch?v=gcShBujgsIQ",
@@ -522,7 +527,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:58:32",
         ]);
 
-        \DB::table('settings')->insertOrIgnore([
+        \DB::table('settings')->insert([
             'id' => 57,
             'key' => "chat_app_type",
             'value' => "whatsapp",
@@ -531,7 +536,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:57:45",
         ]);
 
-        \DB::table('settings')->insertOrIgnore([
+        \DB::table('settings')->insert([
             'id' => 58,
             'key' => "chat_app_number",
             'value' => "8618875690086",
@@ -541,7 +546,7 @@ return new class extends Migration
         ]);
 
         // --- categories (36 records) ---
-        \DB::table('categories')->insertOrIgnore([
+        \DB::table('categories')->insert([
             'id' => 1,
             'name' => "Die Cut Stickers",
             'slug' => "die-cut-stickers",
@@ -558,7 +563,7 @@ return new class extends Migration
             'category_group' => "shape",
         ]);
 
-        \DB::table('categories')->insertOrIgnore([
+        \DB::table('categories')->insert([
             'id' => 2,
             'name' => "Kiss Cut Stickers",
             'slug' => "kiss-cut-stickers",
@@ -575,7 +580,7 @@ return new class extends Migration
             'category_group' => "shape",
         ]);
 
-        \DB::table('categories')->insertOrIgnore([
+        \DB::table('categories')->insert([
             'id' => 3,
             'name' => "Sticker Rolls",
             'slug' => "sticker-rolls",
@@ -592,7 +597,7 @@ return new class extends Migration
             'category_group' => "sticker",
         ]);
 
-        \DB::table('categories')->insertOrIgnore([
+        \DB::table('categories')->insert([
             'id' => 4,
             'name' => "Sticker Sheets",
             'slug' => "sticker-sheets",
@@ -609,7 +614,7 @@ return new class extends Migration
             'category_group' => "sticker",
         ]);
 
-        \DB::table('categories')->insertOrIgnore([
+        \DB::table('categories')->insert([
             'id' => 5,
             'name' => "Vinyl Stickers",
             'slug' => "vinyl-stickers",
@@ -626,7 +631,7 @@ return new class extends Migration
             'category_group' => "material",
         ]);
 
-        \DB::table('categories')->insertOrIgnore([
+        \DB::table('categories')->insert([
             'id' => 6,
             'name' => "Spot UV Stickers",
             'slug' => "spot-uv-stickers",
@@ -643,7 +648,7 @@ return new class extends Migration
             'category_group' => "sticker",
         ]);
 
-        \DB::table('categories')->insertOrIgnore([
+        \DB::table('categories')->insert([
             'id' => 7,
             'name' => "Foil Stickers",
             'slug' => "foil-stickers",
@@ -660,7 +665,7 @@ return new class extends Migration
             'category_group' => "sticker",
         ]);
 
-        \DB::table('categories')->insertOrIgnore([
+        \DB::table('categories')->insert([
             'id' => 8,
             'name' => "Transparent Stickers",
             'slug' => "transparent-stickers",
@@ -677,7 +682,7 @@ return new class extends Migration
             'category_group' => "sticker",
         ]);
 
-        \DB::table('categories')->insertOrIgnore([
+        \DB::table('categories')->insert([
             'id' => 9,
             'name' => "Holographic Stickers",
             'slug' => "holographic-stickers",
@@ -694,7 +699,7 @@ return new class extends Migration
             'category_group' => "material",
         ]);
 
-        \DB::table('categories')->insertOrIgnore([
+        \DB::table('categories')->insert([
             'id' => 10,
             'name' => "Glitter Stickers",
             'slug' => "glitter-stickers",
@@ -711,7 +716,7 @@ return new class extends Migration
             'category_group' => "sticker",
         ]);
 
-        \DB::table('categories')->insertOrIgnore([
+        \DB::table('categories')->insert([
             'id' => 11,
             'name' => "Glossy Stickers",
             'slug' => "glossy-stickers",
@@ -728,7 +733,7 @@ return new class extends Migration
             'category_group' => "sticker",
         ]);
 
-        \DB::table('categories')->insertOrIgnore([
+        \DB::table('categories')->insert([
             'id' => 12,
             'name' => "Circle Stickers",
             'slug' => "circle-stickers",
@@ -745,7 +750,7 @@ return new class extends Migration
             'category_group' => "shape",
         ]);
 
-        \DB::table('categories')->insertOrIgnore([
+        \DB::table('categories')->insert([
             'id' => 13,
             'name' => "Rectangle Stickers",
             'slug' => "rectangle-stickers",
@@ -762,7 +767,7 @@ return new class extends Migration
             'category_group' => "shape",
         ]);
 
-        \DB::table('categories')->insertOrIgnore([
+        \DB::table('categories')->insert([
             'id' => 14,
             'name' => "Square Stickers",
             'slug' => "square-stickers",
@@ -779,7 +784,7 @@ return new class extends Migration
             'category_group' => "shape",
         ]);
 
-        \DB::table('categories')->insertOrIgnore([
+        \DB::table('categories')->insert([
             'id' => 15,
             'name' => "Oval Stickers",
             'slug' => "oval-stickers",
@@ -796,7 +801,7 @@ return new class extends Migration
             'category_group' => "shape",
         ]);
 
-        \DB::table('categories')->insertOrIgnore([
+        \DB::table('categories')->insert([
             'id' => 16,
             'name' => "Bottle Stickers",
             'slug' => "bottle-stickers",
@@ -813,7 +818,7 @@ return new class extends Migration
             'category_group' => "sticker",
         ]);
 
-        \DB::table('categories')->insertOrIgnore([
+        \DB::table('categories')->insert([
             'id' => 17,
             'name' => "Logo Stickers",
             'slug' => "logo-stickers",
@@ -830,7 +835,7 @@ return new class extends Migration
             'category_group' => "sticker",
         ]);
 
-        \DB::table('categories')->insertOrIgnore([
+        \DB::table('categories')->insert([
             'id' => 18,
             'name' => "Outdoor Stickers",
             'slug' => "outdoor-stickers",
@@ -847,7 +852,7 @@ return new class extends Migration
             'category_group' => "sticker",
         ]);
 
-        \DB::table('categories')->insertOrIgnore([
+        \DB::table('categories')->insert([
             'id' => 19,
             'name' => "Juice Bottle Labels",
             'slug' => "juice-bottle-labels",
@@ -864,7 +869,7 @@ return new class extends Migration
             'category_group' => "label",
         ]);
 
-        \DB::table('categories')->insertOrIgnore([
+        \DB::table('categories')->insert([
             'id' => 20,
             'name' => "Candle Labels",
             'slug' => "candle-labels",
@@ -881,7 +886,7 @@ return new class extends Migration
             'category_group' => "industry",
         ]);
 
-        \DB::table('categories')->insertOrIgnore([
+        \DB::table('categories')->insert([
             'id' => 21,
             'name' => "Honey Jar Labels",
             'slug' => "honey-jar-labels",
@@ -898,7 +903,7 @@ return new class extends Migration
             'category_group' => "label",
         ]);
 
-        \DB::table('categories')->insertOrIgnore([
+        \DB::table('categories')->insert([
             'id' => 22,
             'name' => "Labels On Roll",
             'slug' => "labels-on-roll",
@@ -915,7 +920,7 @@ return new class extends Migration
             'category_group' => "label",
         ]);
 
-        \DB::table('categories')->insertOrIgnore([
+        \DB::table('categories')->insert([
             'id' => 23,
             'name' => "Food Labels",
             'slug' => "food-labels",
@@ -932,7 +937,7 @@ return new class extends Migration
             'category_group' => "label",
         ]);
 
-        \DB::table('categories')->insertOrIgnore([
+        \DB::table('categories')->insert([
             'id' => 24,
             'name' => "Seal Labels",
             'slug' => "seal-labels",
@@ -949,7 +954,7 @@ return new class extends Migration
             'category_group' => "label",
         ]);
 
-        \DB::table('categories')->insertOrIgnore([
+        \DB::table('categories')->insert([
             'id' => 25,
             'name' => "PET Labels",
             'slug' => "pet-labels",
@@ -966,7 +971,7 @@ return new class extends Migration
             'category_group' => "material",
         ]);
 
-        \DB::table('categories')->insertOrIgnore([
+        \DB::table('categories')->insert([
             'id' => 26,
             'name' => "PP Labels",
             'slug' => "pp-labels",
@@ -983,7 +988,7 @@ return new class extends Migration
             'category_group' => "material",
         ]);
 
-        \DB::table('categories')->insertOrIgnore([
+        \DB::table('categories')->insert([
             'id' => 27,
             'name' => "Kraft Labels",
             'slug' => "kraft-labels",
@@ -1000,7 +1005,7 @@ return new class extends Migration
             'category_group' => "material",
         ]);
 
-        \DB::table('categories')->insertOrIgnore([
+        \DB::table('categories')->insert([
             'id' => 28,
             'name' => "Foil Labels",
             'slug' => "foil-labels",
@@ -1017,7 +1022,7 @@ return new class extends Migration
             'category_group' => "material",
         ]);
 
-        \DB::table('categories')->insertOrIgnore([
+        \DB::table('categories')->insert([
             'id' => 29,
             'name' => "Transparent Labels",
             'slug' => "transparent-labels",
@@ -1034,7 +1039,7 @@ return new class extends Migration
             'category_group' => "material",
         ]);
 
-        \DB::table('categories')->insertOrIgnore([
+        \DB::table('categories')->insert([
             'id' => 30,
             'name' => "Brewery Labels",
             'slug' => "brewery-labels",
@@ -1051,7 +1056,7 @@ return new class extends Migration
             'category_group' => "industry",
         ]);
 
-        \DB::table('categories')->insertOrIgnore([
+        \DB::table('categories')->insert([
             'id' => 31,
             'name' => "Cosmetic Labels",
             'slug' => "cosmetic-labels",
@@ -1068,7 +1073,7 @@ return new class extends Migration
             'category_group' => "industry",
         ]);
 
-        \DB::table('categories')->insertOrIgnore([
+        \DB::table('categories')->insert([
             'id' => 32,
             'name' => "Food & Beverage Labels",
             'slug' => "food-beverage-labels",
@@ -1085,7 +1090,7 @@ return new class extends Migration
             'category_group' => "industry",
         ]);
 
-        \DB::table('categories')->insertOrIgnore([
+        \DB::table('categories')->insert([
             'id' => 33,
             'name' => "Pharmaceutical Labels",
             'slug' => "pharma-labels",
@@ -1102,7 +1107,7 @@ return new class extends Migration
             'category_group' => "industry",
         ]);
 
-        \DB::table('categories')->insertOrIgnore([
+        \DB::table('categories')->insert([
             'id' => 34,
             'name' => "Cannabis Labels",
             'slug' => "cannabis-labels",
@@ -1119,7 +1124,7 @@ return new class extends Migration
             'category_group' => "industry",
         ]);
 
-        \DB::table('categories')->insertOrIgnore([
+        \DB::table('categories')->insert([
             'id' => 35,
             'name' => "Amazon Seller Labels",
             'slug' => "amazon-labels",
@@ -1136,7 +1141,7 @@ return new class extends Migration
             'category_group' => "industry",
         ]);
 
-        \DB::table('categories')->insertOrIgnore([
+        \DB::table('categories')->insert([
             'id' => 36,
             'name' => "Custom Shape",
             'slug' => "custom-shape-stickers",
@@ -1154,7 +1159,7 @@ return new class extends Migration
         ]);
 
         // --- products (182 records) ---
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 1,
             'category_id' => 9,
             'name' => "Holographic Stickers",
@@ -1176,7 +1181,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 11:40:38",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 2,
             'category_id' => 1,
             'name' => "Die Cut Stickers",
@@ -1198,7 +1203,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 11:40:38",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 3,
             'category_id' => 5,
             'name' => "Vinyl Stickers",
@@ -1220,7 +1225,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 11:40:38",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 4,
             'category_id' => 17,
             'name' => "Logo Stickers",
@@ -1242,7 +1247,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 11:40:38",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 5,
             'category_id' => 23,
             'name' => "Food Labels",
@@ -1264,7 +1269,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 11:40:38",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 6,
             'category_id' => 20,
             'name' => "Candle Labels",
@@ -1286,7 +1291,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 11:40:38",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 7,
             'category_id' => 30,
             'name' => "Beer Bottle Labels",
@@ -1308,7 +1313,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 8,
             'category_id' => 30,
             'name' => "Craft Beer Labels",
@@ -1330,7 +1335,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 9,
             'category_id' => 30,
             'name' => "Wine Bottle Labels",
@@ -1352,7 +1357,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 10,
             'category_id' => 30,
             'name' => "Cider Labels",
@@ -1374,7 +1379,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 11,
             'category_id' => 30,
             'name' => "Brewery Can Labels",
@@ -1396,7 +1401,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 12,
             'category_id' => 34,
             'name' => "Cannabis Tincture Labels",
@@ -1418,7 +1423,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 13,
             'category_id' => 34,
             'name' => "Edibles Packaging Labels",
@@ -1440,7 +1445,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 14,
             'category_id' => 34,
             'name' => "Marijuana Jar Labels",
@@ -1462,7 +1467,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 15,
             'category_id' => 34,
             'name' => "Vape Cartridge Labels",
@@ -1484,7 +1489,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 16,
             'category_id' => 34,
             'name' => "CBD Topical Labels",
@@ -1506,7 +1511,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 17,
             'category_id' => 31,
             'name' => "Lip Balm Labels",
@@ -1528,7 +1533,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 18,
             'category_id' => 31,
             'name' => "Serum Bottle Labels",
@@ -1550,7 +1555,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 19,
             'category_id' => 31,
             'name' => "Skincare Jar Labels",
@@ -1572,7 +1577,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 20,
             'category_id' => 31,
             'name' => "Shampoo Bottle Labels",
@@ -1594,7 +1599,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 21,
             'category_id' => 31,
             'name' => "Makeup Palette Labels",
@@ -1616,7 +1621,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 22,
             'category_id' => 33,
             'name' => "Prescription Bottle Labels",
@@ -1638,7 +1643,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 23,
             'category_id' => 33,
             'name' => "Supplement Bottle Labels",
@@ -1660,7 +1665,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 24,
             'category_id' => 33,
             'name' => "Medical Device Labels",
@@ -1682,7 +1687,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 25,
             'category_id' => 33,
             'name' => "Lab Specimen Labels",
@@ -1704,7 +1709,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 26,
             'category_id' => 33,
             'name' => "OTC Drug Labels",
@@ -1726,7 +1731,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 27,
             'category_id' => 35,
             'name' => "FNSKU Labels",
@@ -1748,7 +1753,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 28,
             'category_id' => 35,
             'name' => "Shipping Box Labels",
@@ -1770,7 +1775,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 29,
             'category_id' => 35,
             'name' => "Product Insert Labels",
@@ -1792,7 +1797,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 30,
             'category_id' => 35,
             'name' => "Sustainability Labels",
@@ -1814,7 +1819,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 31,
             'category_id' => 35,
             'name' => "Prime Badge Labels",
@@ -1836,7 +1841,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 32,
             'category_id' => 32,
             'name' => "Jam Jar Labels",
@@ -1858,7 +1863,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 33,
             'category_id' => 32,
             'name' => "Kombucha Bottle Labels",
@@ -1880,7 +1885,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 34,
             'category_id' => 32,
             'name' => "Honey Jar Labels",
@@ -1902,7 +1907,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 35,
             'category_id' => 32,
             'name' => "Coffee Bag Labels",
@@ -1924,7 +1929,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 36,
             'category_id' => 32,
             'name' => "Beverage Bottle Labels",
@@ -1946,7 +1951,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 37,
             'category_id' => 28,
             'name' => "Gold Foil Labels",
@@ -1968,7 +1973,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 38,
             'category_id' => 28,
             'name' => "Silver Foil Labels",
@@ -1990,7 +1995,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 39,
             'category_id' => 28,
             'name' => "Holographic Foil Labels",
@@ -2012,7 +2017,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 40,
             'category_id' => 28,
             'name' => "Colored Foil Labels",
@@ -2034,7 +2039,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 41,
             'category_id' => 28,
             'name' => "Black Foil Labels",
@@ -2056,7 +2061,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 42,
             'category_id' => 27,
             'name' => "Natural Kraft Labels",
@@ -2078,7 +2083,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 43,
             'category_id' => 27,
             'name' => "Recycled Kraft Labels",
@@ -2100,7 +2105,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 44,
             'category_id' => 27,
             'name' => "Kraft Jar Labels",
@@ -2122,7 +2127,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 45,
             'category_id' => 27,
             'name' => "Vintage Kraft Labels",
@@ -2144,7 +2149,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 46,
             'category_id' => 27,
             'name' => "Compostable Kraft Labels",
@@ -2166,7 +2171,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 47,
             'category_id' => 25,
             'name' => "Premium PET Labels",
@@ -2188,7 +2193,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 48,
             'category_id' => 25,
             'name' => "Waterproof PET Labels",
@@ -2210,7 +2215,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 49,
             'category_id' => 25,
             'name' => "Chemical Resistant PET Labels",
@@ -2232,7 +2237,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 50,
             'category_id' => 25,
             'name' => "Freezer Grade PET Labels",
@@ -2254,7 +2259,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 51,
             'category_id' => 25,
             'name' => "Transparent PET Labels",
@@ -2276,7 +2281,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 52,
             'category_id' => 26,
             'name' => "Flexible PP Labels",
@@ -2298,7 +2303,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 53,
             'category_id' => 26,
             'name' => "Food Safe PP Labels",
@@ -2320,7 +2325,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 54,
             'category_id' => 26,
             'name' => "Squeeze Bottle PP Labels",
@@ -2342,7 +2347,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 55,
             'category_id' => 26,
             'name' => "White PP Labels",
@@ -2364,7 +2369,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 56,
             'category_id' => 26,
             'name' => "Economy PP Labels",
@@ -2386,7 +2391,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 57,
             'category_id' => 29,
             'name' => "Clear Transparent Labels",
@@ -2408,7 +2413,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 58,
             'category_id' => 29,
             'name' => "Frosted Transparent Labels",
@@ -2430,7 +2435,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 59,
             'category_id' => 29,
             'name' => "Window Sticker Labels",
@@ -2452,7 +2457,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 60,
             'category_id' => 29,
             'name' => "Cosmetic Transparent Labels",
@@ -2474,7 +2479,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 61,
             'category_id' => 29,
             'name' => "Water Bottle Transparent Labels",
@@ -2496,7 +2501,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 62,
             'category_id' => 5,
             'name' => "Outdoor Vinyl Stickers",
@@ -2518,7 +2523,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 63,
             'category_id' => 5,
             'name' => "White Vinyl Stickers",
@@ -2540,7 +2545,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 64,
             'category_id' => 5,
             'name' => "Clear Vinyl Stickers",
@@ -2562,7 +2567,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 65,
             'category_id' => 5,
             'name' => "Removable Vinyl Stickers",
@@ -2584,7 +2589,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 66,
             'category_id' => 5,
             'name' => "High-Tack Vinyl Stickers",
@@ -2606,7 +2611,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 67,
             'category_id' => 12,
             'name' => "Round Price Stickers",
@@ -2628,7 +2633,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 68,
             'category_id' => 12,
             'name' => "Seal Stickers",
@@ -2650,7 +2655,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 69,
             'category_id' => 12,
             'name' => "Logo Circle Stickers",
@@ -2672,7 +2677,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 70,
             'category_id' => 12,
             'name' => "Dot Stickers",
@@ -2694,7 +2699,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 71,
             'category_id' => 12,
             'name' => "Round Thank You Stickers",
@@ -2716,7 +2721,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 72,
             'category_id' => 36,
             'name' => "Custom Logo Shape Stickers",
@@ -2738,7 +2743,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 73,
             'category_id' => 36,
             'name' => "Character Shape Stickers",
@@ -2760,7 +2765,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 74,
             'category_id' => 36,
             'name' => "Badge Shape Stickers",
@@ -2782,7 +2787,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 75,
             'category_id' => 36,
             'name' => "Fruit Shape Stickers",
@@ -2804,7 +2809,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 76,
             'category_id' => 36,
             'name' => "Badge Ribbon Stickers",
@@ -2826,7 +2831,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 77,
             'category_id' => 1,
             'name' => "Custom Logo Stickers",
@@ -2848,7 +2853,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 78,
             'category_id' => 1,
             'name' => "Product Label Stickers",
@@ -2870,7 +2875,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 79,
             'category_id' => 1,
             'name' => "Business Card Stickers",
@@ -2892,7 +2897,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 80,
             'category_id' => 1,
             'name' => "Brand Promotion Stickers",
@@ -2914,7 +2919,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 81,
             'category_id' => 1,
             'name' => "Laptop Decal Stickers",
@@ -2936,7 +2941,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 82,
             'category_id' => 2,
             'name' => "Sticker Sheet Sets",
@@ -2958,7 +2963,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 83,
             'category_id' => 2,
             'name' => "Brand Sticker Sheets",
@@ -2980,7 +2985,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 84,
             'category_id' => 2,
             'name' => "Event Sticker Packs",
@@ -3002,7 +3007,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 85,
             'category_id' => 2,
             'name' => "Logo Sticker Sheets",
@@ -3024,7 +3029,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 86,
             'category_id' => 2,
             'name' => "Promotional Sticker Books",
@@ -3046,7 +3051,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 87,
             'category_id' => 13,
             'name' => "Address Labels",
@@ -3068,7 +3073,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 88,
             'category_id' => 13,
             'name' => "Product Tag Stickers",
@@ -3090,7 +3095,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 89,
             'category_id' => 13,
             'name' => "Barcode Stickers",
@@ -3112,7 +3117,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 90,
             'category_id' => 13,
             'name' => "Warning Label Stickers",
@@ -3134,7 +3139,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 91,
             'category_id' => 13,
             'name' => "Rectangle Logo Stickers",
@@ -3156,7 +3161,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 92,
             'category_id' => 14,
             'name' => "Social Media Stickers",
@@ -3178,7 +3183,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 93,
             'category_id' => 14,
             'name' => "QR Code Stickers",
@@ -3200,7 +3205,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 94,
             'category_id' => 14,
             'name' => "Mini Logo Stickers",
@@ -3222,7 +3227,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 95,
             'category_id' => 14,
             'name' => "Sale Tag Stickers",
@@ -3244,7 +3249,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 96,
             'category_id' => 14,
             'name' => "Square Stickers Pack",
@@ -3266,7 +3271,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20T19:55:39.105296",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 97,
             'category_id' => 3,
             'name' => "Custom Sticker Roll - Brand Logo",
@@ -3288,7 +3293,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 98,
             'category_id' => 3,
             'name' => "Promotional Sticker Roll - Retail",
@@ -3310,7 +3315,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 99,
             'category_id' => 3,
             'name' => "Barcode Sticker Roll - Inventory",
@@ -3332,7 +3337,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 100,
             'category_id' => 3,
             'name' => "Shipping Label Roll - E-commerce",
@@ -3354,7 +3359,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 101,
             'category_id' => 3,
             'name' => "Product Tag Roll - Retail",
@@ -3376,7 +3381,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 102,
             'category_id' => 4,
             'name' => "Address Label Sheets - Office",
@@ -3398,7 +3403,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 103,
             'category_id' => 4,
             'name' => "Product Label Sheets - Retail",
@@ -3420,7 +3425,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 104,
             'category_id' => 4,
             'name' => "Warning Label Sheets - Industrial",
@@ -3442,7 +3447,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 105,
             'category_id' => 4,
             'name' => "Name Tag Sheets - Events",
@@ -3464,7 +3469,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 106,
             'category_id' => 4,
             'name' => "Barcode Label Sheets - Warehouse",
@@ -3486,7 +3491,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 107,
             'category_id' => 6,
             'name' => "Spot UV Business Cards",
@@ -3508,7 +3513,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 108,
             'category_id' => 6,
             'name' => "Spot UV Product Labels",
@@ -3530,7 +3535,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 109,
             'category_id' => 6,
             'name' => "Spot UV Promotional Stickers",
@@ -3552,7 +3557,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 110,
             'category_id' => 6,
             'name' => "Spot UV Logo Stickers",
@@ -3574,7 +3579,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 111,
             'category_id' => 6,
             'name' => "Spot UV Packaging Labels",
@@ -3596,7 +3601,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 112,
             'category_id' => 7,
             'name' => "Gold Foil Gift Stickers",
@@ -3618,7 +3623,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 113,
             'category_id' => 7,
             'name' => "Silver Foil Address Labels",
@@ -3640,7 +3645,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 114,
             'category_id' => 7,
             'name' => "Rose Gold Foil Product Tags",
@@ -3662,7 +3667,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 115,
             'category_id' => 7,
             'name' => "Holographic Foil Stickers",
@@ -3684,7 +3689,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 116,
             'category_id' => 7,
             'name' => "Custom Foil Seals - Packaging",
@@ -3706,7 +3711,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 117,
             'category_id' => 8,
             'name' => "Clear Product Labels - Cosmetic",
@@ -3728,7 +3733,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 118,
             'category_id' => 8,
             'name' => "Transparent Warning Stickers",
@@ -3750,7 +3755,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 119,
             'category_id' => 8,
             'name' => "Window Decal Stickers",
@@ -3772,7 +3777,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 120,
             'category_id' => 8,
             'name' => "Glass Bottle Labels",
@@ -3794,7 +3799,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 121,
             'category_id' => 8,
             'name' => "Transparent Logo Stickers",
@@ -3816,7 +3821,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 122,
             'category_id' => 10,
             'name' => "Glitter Party Stickers - Kids",
@@ -3838,7 +3843,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 123,
             'category_id' => 10,
             'name' => "Glitter Craft Stickers - DIY",
@@ -3860,7 +3865,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 124,
             'category_id' => 10,
             'name' => "Glitter Festival Stickers",
@@ -3882,7 +3887,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 125,
             'category_id' => 10,
             'name' => "Glitter Cosmetic Labels",
@@ -3904,7 +3909,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 126,
             'category_id' => 10,
             'name' => "Glitter Gift Tags",
@@ -3926,7 +3931,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 127,
             'category_id' => 11,
             'name' => "High Gloss Product Labels",
@@ -3948,7 +3953,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 128,
             'category_id' => 11,
             'name' => "Glossy Promotional Stickers",
@@ -3970,7 +3975,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 129,
             'category_id' => 11,
             'name' => "Glossy Warning Labels",
@@ -3992,7 +3997,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 130,
             'category_id' => 11,
             'name' => "Glossy Bottle Labels",
@@ -4014,7 +4019,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 131,
             'category_id' => 11,
             'name' => "Glossy Packaging Stickers",
@@ -4036,7 +4041,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 132,
             'category_id' => 15,
             'name' => "Oval Price Labels - Retail",
@@ -4058,7 +4063,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 133,
             'category_id' => 15,
             'name' => "Oval Product Stickers",
@@ -4080,7 +4085,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 134,
             'category_id' => 15,
             'name' => "Oval Warning Stickers",
@@ -4102,7 +4107,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 135,
             'category_id' => 15,
             'name' => "Oval Logo Stickers",
@@ -4124,7 +4129,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 136,
             'category_id' => 15,
             'name' => "Oval Jar Labels - Food",
@@ -4146,7 +4151,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 137,
             'category_id' => 16,
             'name' => "Water Bottle Labels - Event",
@@ -4168,7 +4173,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 138,
             'category_id' => 16,
             'name' => "Beer Bottle Stickers - Craft",
@@ -4190,7 +4195,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 139,
             'category_id' => 16,
             'name' => "Wine Bottle Stickers - Boutique",
@@ -4212,7 +4217,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 140,
             'category_id' => 16,
             'name' => "Shampoo Bottle Labels - Cosmetic",
@@ -4234,7 +4239,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 141,
             'category_id' => 16,
             'name' => "Supplement Bottle Labels",
@@ -4256,7 +4261,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 142,
             'category_id' => 17,
             'name' => "Company Logo Stickers",
@@ -4278,7 +4283,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 143,
             'category_id' => 17,
             'name' => "Brand Logo Decals",
@@ -4300,7 +4305,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 144,
             'category_id' => 17,
             'name' => "Website Logo Stickers",
@@ -4322,7 +4327,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 145,
             'category_id' => 17,
             'name' => "Social Media Stickers",
@@ -4344,7 +4349,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 146,
             'category_id' => 18,
             'name' => "Car Window Stickers",
@@ -4366,7 +4371,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 147,
             'category_id' => 18,
             'name' => "Outdoor Warning Labels",
@@ -4388,7 +4393,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 148,
             'category_id' => 18,
             'name' => "Weatherproof Equipment Labels",
@@ -4410,7 +4415,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 149,
             'category_id' => 18,
             'name' => "UV Resistant Outdoor Stickers",
@@ -4432,7 +4437,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 150,
             'category_id' => 18,
             'name' => "Industrial Safety Stickers",
@@ -4454,7 +4459,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 151,
             'category_id' => 19,
             'name' => "Fresh Orange Juice Labels",
@@ -4476,7 +4481,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 152,
             'category_id' => 19,
             'name' => "Apple Juice Bottle Labels",
@@ -4498,7 +4503,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 153,
             'category_id' => 19,
             'name' => "Mixed Fruit Juice Tags",
@@ -4520,7 +4525,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 154,
             'category_id' => 19,
             'name' => "Cold Pressed Juice Labels",
@@ -4542,7 +4547,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 155,
             'category_id' => 19,
             'name' => "Organic Juice Bottle Stickers",
@@ -4564,7 +4569,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 156,
             'category_id' => 20,
             'name' => "Soy Candle Labels",
@@ -4586,7 +4591,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 157,
             'category_id' => 20,
             'name' => "Scented Candle Tags",
@@ -4608,7 +4613,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 158,
             'category_id' => 20,
             'name' => "Handmade Candle Stickers",
@@ -4630,7 +4635,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 159,
             'category_id' => 20,
             'name' => "Aromatherapy Candle Labels",
@@ -4652,7 +4657,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 160,
             'category_id' => 21,
             'name' => "Raw Honey Jar Labels",
@@ -4674,7 +4679,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 161,
             'category_id' => 21,
             'name' => "Organic Honey Tags",
@@ -4696,7 +4701,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 162,
             'category_id' => 21,
             'name' => "Honeycomb Jar Stickers",
@@ -4718,7 +4723,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 163,
             'category_id' => 21,
             'name' => "Artisan Honey Labels",
@@ -4740,7 +4745,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 164,
             'category_id' => 21,
             'name' => "Local Honey Bottle Labels",
@@ -4762,7 +4767,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 165,
             'category_id' => 22,
             'name' => "Shipping Labels - Roll Format",
@@ -4784,7 +4789,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 166,
             'category_id' => 22,
             'name' => "Barcode Labels - Roll",
@@ -4806,7 +4811,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 167,
             'category_id' => 22,
             'name' => "Address Labels - Roll",
@@ -4828,7 +4833,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 168,
             'category_id' => 22,
             'name' => "Product Labels - Roll",
@@ -4850,7 +4855,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 169,
             'category_id' => 22,
             'name' => "Inventory Labels - Roll",
@@ -4872,7 +4877,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 170,
             'category_id' => 23,
             'name' => "Food Container Labels",
@@ -4894,7 +4899,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 171,
             'category_id' => 23,
             'name' => "Grocery Price Tags",
@@ -4916,7 +4921,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 172,
             'category_id' => 23,
             'name' => "Organic Food Stickers",
@@ -4938,7 +4943,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 173,
             'category_id' => 23,
             'name' => "Nutrition Labels",
@@ -4960,7 +4965,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 174,
             'category_id' => 24,
             'name' => "Wax Seal Stickers",
@@ -4982,7 +4987,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 175,
             'category_id' => 24,
             'name' => "Security Seal Labels",
@@ -5004,7 +5009,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 176,
             'category_id' => 24,
             'name' => "Guarantee Seal Stickers",
@@ -5026,7 +5031,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 177,
             'category_id' => 24,
             'name' => "Certificate Seal Labels",
@@ -5048,7 +5053,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 178,
             'category_id' => 24,
             'name' => "Tamper Evident Seals",
@@ -5070,7 +5075,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 179,
             'category_id' => 9,
             'name' => "Holographic Gaming Stickers",
@@ -5092,7 +5097,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 180,
             'category_id' => 9,
             'name' => "Holographic Tech Stickers",
@@ -5114,7 +5119,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 181,
             'category_id' => 9,
             'name' => "Holographic Phone Decals",
@@ -5136,7 +5141,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 09:25:07",
         ]);
 
-        \DB::table('products')->insertOrIgnore([
+        \DB::table('products')->insert([
             'id' => 182,
             'category_id' => 9,
             'name' => "Holographic Laptop Stickers",
@@ -5159,7 +5164,7 @@ return new class extends Migration
         ]);
 
         // --- faqs (65 records) ---
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 1,
             'product_id' => null,
             'category_id' => 1,
@@ -5171,7 +5176,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:35",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 2,
             'product_id' => null,
             'category_id' => 2,
@@ -5183,7 +5188,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:35",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 3,
             'product_id' => null,
             'category_id' => 3,
@@ -5195,7 +5200,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:35",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 4,
             'product_id' => null,
             'category_id' => 4,
@@ -5207,7 +5212,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:36",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 5,
             'product_id' => null,
             'category_id' => 5,
@@ -5219,7 +5224,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:36",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 6,
             'product_id' => null,
             'category_id' => 6,
@@ -5231,7 +5236,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:36",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 7,
             'product_id' => null,
             'category_id' => 7,
@@ -5243,7 +5248,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:36",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 8,
             'product_id' => null,
             'category_id' => 8,
@@ -5255,7 +5260,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:36",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 9,
             'product_id' => null,
             'category_id' => 9,
@@ -5267,7 +5272,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:36",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 10,
             'product_id' => null,
             'category_id' => 10,
@@ -5279,7 +5284,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:37",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 11,
             'product_id' => null,
             'category_id' => 11,
@@ -5291,7 +5296,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:37",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 12,
             'product_id' => null,
             'category_id' => 12,
@@ -5303,7 +5308,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:37",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 13,
             'product_id' => null,
             'category_id' => 13,
@@ -5315,7 +5320,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:37",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 14,
             'product_id' => null,
             'category_id' => 19,
@@ -5327,7 +5332,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:37",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 15,
             'product_id' => null,
             'category_id' => 20,
@@ -5339,7 +5344,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:37",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 16,
             'product_id' => null,
             'category_id' => 21,
@@ -5351,7 +5356,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:37",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 17,
             'product_id' => null,
             'category_id' => 22,
@@ -5363,7 +5368,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:38",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 18,
             'product_id' => null,
             'category_id' => 23,
@@ -5375,7 +5380,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:38",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 19,
             'product_id' => null,
             'category_id' => 24,
@@ -5387,7 +5392,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:38",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 20,
             'product_id' => null,
             'category_id' => 19,
@@ -5399,7 +5404,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:38",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 21,
             'product_id' => null,
             'category_id' => 20,
@@ -5411,7 +5416,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:38",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 22,
             'product_id' => null,
             'category_id' => 21,
@@ -5423,7 +5428,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:38",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 23,
             'product_id' => null,
             'category_id' => 22,
@@ -5435,7 +5440,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:39",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 24,
             'product_id' => 1,
             'category_id' => null,
@@ -5447,7 +5452,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:39",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 25,
             'product_id' => 1,
             'category_id' => null,
@@ -5459,7 +5464,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:39",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 26,
             'product_id' => 1,
             'category_id' => null,
@@ -5471,7 +5476,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:39",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 27,
             'product_id' => 1,
             'category_id' => null,
@@ -5483,7 +5488,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:39",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 28,
             'product_id' => 1,
             'category_id' => null,
@@ -5495,7 +5500,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:39",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 29,
             'product_id' => 2,
             'category_id' => null,
@@ -5507,7 +5512,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:39",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 30,
             'product_id' => 2,
             'category_id' => null,
@@ -5519,7 +5524,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:40",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 31,
             'product_id' => 2,
             'category_id' => null,
@@ -5531,7 +5536,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:40",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 32,
             'product_id' => 2,
             'category_id' => null,
@@ -5543,7 +5548,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:40",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 33,
             'product_id' => 2,
             'category_id' => null,
@@ -5555,7 +5560,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:40",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 34,
             'product_id' => 3,
             'category_id' => null,
@@ -5567,7 +5572,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:40",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 35,
             'product_id' => 3,
             'category_id' => null,
@@ -5579,7 +5584,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:40",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 36,
             'product_id' => 3,
             'category_id' => null,
@@ -5591,7 +5596,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:41",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 37,
             'product_id' => 3,
             'category_id' => null,
@@ -5603,7 +5608,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:41",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 38,
             'product_id' => 3,
             'category_id' => null,
@@ -5615,7 +5620,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:41",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 39,
             'product_id' => 4,
             'category_id' => null,
@@ -5627,7 +5632,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:41",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 40,
             'product_id' => 4,
             'category_id' => null,
@@ -5639,7 +5644,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:41",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 41,
             'product_id' => 4,
             'category_id' => null,
@@ -5651,7 +5656,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:41",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 42,
             'product_id' => 4,
             'category_id' => null,
@@ -5663,7 +5668,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:41",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 43,
             'product_id' => 4,
             'category_id' => null,
@@ -5675,7 +5680,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:42",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 44,
             'product_id' => 5,
             'category_id' => null,
@@ -5687,7 +5692,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:42",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 45,
             'product_id' => 5,
             'category_id' => null,
@@ -5699,7 +5704,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:42",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 46,
             'product_id' => 5,
             'category_id' => null,
@@ -5711,7 +5716,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:42",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 47,
             'product_id' => 5,
             'category_id' => null,
@@ -5723,7 +5728,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:42",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 48,
             'product_id' => 5,
             'category_id' => null,
@@ -5735,7 +5740,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:42",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 49,
             'product_id' => 6,
             'category_id' => null,
@@ -5747,7 +5752,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:43",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 50,
             'product_id' => 6,
             'category_id' => null,
@@ -5759,7 +5764,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:43",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 51,
             'product_id' => 6,
             'category_id' => null,
@@ -5771,7 +5776,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:43",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 52,
             'product_id' => 6,
             'category_id' => null,
@@ -5783,7 +5788,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:43",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 53,
             'product_id' => 6,
             'category_id' => null,
@@ -5795,7 +5800,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:43",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 54,
             'product_id' => null,
             'category_id' => 5,
@@ -5807,7 +5812,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 11:40:38",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 55,
             'product_id' => null,
             'category_id' => 5,
@@ -5819,7 +5824,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 11:40:38",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 56,
             'product_id' => null,
             'category_id' => 5,
@@ -5831,7 +5836,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 11:40:38",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 57,
             'product_id' => null,
             'category_id' => 5,
@@ -5843,7 +5848,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 11:40:38",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 58,
             'product_id' => null,
             'category_id' => 20,
@@ -5855,7 +5860,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 11:40:38",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 59,
             'product_id' => null,
             'category_id' => 20,
@@ -5867,7 +5872,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 11:40:38",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 60,
             'product_id' => null,
             'category_id' => 20,
@@ -5879,7 +5884,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 11:40:38",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 61,
             'product_id' => null,
             'category_id' => 1,
@@ -5891,7 +5896,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 11:40:38",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 62,
             'product_id' => null,
             'category_id' => 1,
@@ -5903,7 +5908,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 11:40:38",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 63,
             'product_id' => null,
             'category_id' => 1,
@@ -5915,7 +5920,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 11:40:38",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 64,
             'product_id' => null,
             'category_id' => 25,
@@ -5927,7 +5932,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 11:40:38",
         ]);
 
-        \DB::table('faqs')->insertOrIgnore([
+        \DB::table('faqs')->insert([
             'id' => 65,
             'product_id' => null,
             'category_id' => 27,
@@ -5940,7 +5945,7 @@ return new class extends Migration
         ]);
 
         // --- blog_posts (5 records) ---
-        \DB::table('blog_posts')->insertOrIgnore([
+        \DB::table('blog_posts')->insert([
             'id' => 1,
             'title' => "The Ultimate Guide to Custom Die Cut Stickers for Your Business",
             'slug' => "ultimate-guide-custom-die-cut-stickers",
@@ -5955,7 +5960,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:44",
         ]);
 
-        \DB::table('blog_posts')->insertOrIgnore([
+        \DB::table('blog_posts')->insert([
             'id' => 2,
             'title' => "Holographic Stickers: The Secret Weapon for Brand Differentiation",
             'slug' => "holographic-stickers-brand-differentiation",
@@ -5970,7 +5975,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:44",
         ]);
 
-        \DB::table('blog_posts')->insertOrIgnore([
+        \DB::table('blog_posts')->insert([
             'id' => 3,
             'title' => "Vinyl Stickers vs Paper Stickers: Which Is Right for Your Project?",
             'slug' => "vinyl-stickers-vs-paper-stickers",
@@ -5985,7 +5990,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:44",
         ]);
 
-        \DB::table('blog_posts')->insertOrIgnore([
+        \DB::table('blog_posts')->insert([
             'id' => 4,
             'title' => "Food Label Compliance: Everything You Need to Know in 2024",
             'slug' => "food-label-compliance-guide-2024",
@@ -6000,7 +6005,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:44",
         ]);
 
-        \DB::table('blog_posts')->insertOrIgnore([
+        \DB::table('blog_posts')->insert([
             'id' => 5,
             'title' => "How to Design the Perfect Candle Label for Your Brand",
             'slug' => "design-perfect-candle-label",
@@ -6016,7 +6021,7 @@ return new class extends Migration
         ]);
 
         // --- certificates (8 records) ---
-        \DB::table('certificates')->insertOrIgnore([
+        \DB::table('certificates')->insert([
             'id' => 1,
             'name' => "BSCI",
             'image' => "certificates/UiisPSO0pv85h2ITT5nfM4qAnwIdNXsqJ2rHkCLo.png",
@@ -6026,7 +6031,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 01:57:30",
         ]);
 
-        \DB::table('certificates')->insertOrIgnore([
+        \DB::table('certificates')->insert([
             'id' => 2,
             'name' => "CUL",
             'image' => "/images/certificates/cul.png",
@@ -6036,7 +6041,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:45",
         ]);
 
-        \DB::table('certificates')->insertOrIgnore([
+        \DB::table('certificates')->insert([
             'id' => 3,
             'name' => "UL",
             'image' => "/images/certificates/ul.png",
@@ -6046,7 +6051,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:45",
         ]);
 
-        \DB::table('certificates')->insertOrIgnore([
+        \DB::table('certificates')->insert([
             'id' => 4,
             'name' => "REACH",
             'image' => "/images/certificates/reach.png",
@@ -6056,7 +6061,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:45",
         ]);
 
-        \DB::table('certificates')->insertOrIgnore([
+        \DB::table('certificates')->insert([
             'id' => 5,
             'name' => "FSC",
             'image' => "/images/certificates/fsc.png",
@@ -6066,7 +6071,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:45",
         ]);
 
-        \DB::table('certificates')->insertOrIgnore([
+        \DB::table('certificates')->insert([
             'id' => 6,
             'name' => "CSA",
             'image' => "/images/certificates/csa.png",
@@ -6076,7 +6081,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:45",
         ]);
 
-        \DB::table('certificates')->insertOrIgnore([
+        \DB::table('certificates')->insert([
             'id' => 7,
             'name' => "ISO",
             'image' => "/images/certificates/iso.png",
@@ -6086,7 +6091,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:46",
         ]);
 
-        \DB::table('certificates')->insertOrIgnore([
+        \DB::table('certificates')->insert([
             'id' => 8,
             'name' => "GMI",
             'image' => "/images/certificates/gmi.png",
@@ -6097,7 +6102,7 @@ return new class extends Migration
         ]);
 
         // --- brands (6 records) ---
-        \DB::table('brands')->insertOrIgnore([
+        \DB::table('brands')->insert([
             'id' => 1,
             'name' => "Coca-Cola",
             'image' => "/images/brands/coca-cola.png",
@@ -6108,7 +6113,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:46",
         ]);
 
-        \DB::table('brands')->insertOrIgnore([
+        \DB::table('brands')->insert([
             'id' => 2,
             'name' => "Unilever",
             'image' => "/images/brands/unilever.png",
@@ -6119,7 +6124,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:46",
         ]);
 
-        \DB::table('brands')->insertOrIgnore([
+        \DB::table('brands')->insert([
             'id' => 3,
             'name' => "L'Oreal",
             'image' => "/images/brands/loreal.png",
@@ -6130,7 +6135,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:46",
         ]);
 
-        \DB::table('brands')->insertOrIgnore([
+        \DB::table('brands')->insert([
             'id' => 4,
             'name' => "Nestle",
             'image' => "/images/brands/nestle.png",
@@ -6141,7 +6146,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:46",
         ]);
 
-        \DB::table('brands')->insertOrIgnore([
+        \DB::table('brands')->insert([
             'id' => 5,
             'name' => "amazon",
             'image' => "brands/lt1sv7iFuTw5O7HLkBRl4nh7NZamD7lriGwlFvnf.jpg",
@@ -6152,7 +6157,7 @@ return new class extends Migration
             'updated_at' => "2026-05-21 06:43:40",
         ]);
 
-        \DB::table('brands')->insertOrIgnore([
+        \DB::table('brands')->insert([
             'id' => 6,
             'name' => "Walmart",
             'image' => "brands/HsSqdESoCQFGsbpw4sFL07Tvrkiom1s7idJuuQVE.png",
@@ -6164,7 +6169,7 @@ return new class extends Migration
         ]);
 
         // --- team_members (4 records) ---
-        \DB::table('team_members')->insertOrIgnore([
+        \DB::table('team_members')->insert([
             'id' => 1,
             'name' => "Allen",
             'title' => "Sales Manager",
@@ -6176,7 +6181,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:46",
         ]);
 
-        \DB::table('team_members')->insertOrIgnore([
+        \DB::table('team_members')->insert([
             'id' => 2,
             'name' => "Lee",
             'title' => "Senior Consultant",
@@ -6188,7 +6193,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:47",
         ]);
 
-        \DB::table('team_members')->insertOrIgnore([
+        \DB::table('team_members')->insert([
             'id' => 3,
             'name' => "Liang",
             'title' => "Marketing Director",
@@ -6200,7 +6205,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:47",
         ]);
 
-        \DB::table('team_members')->insertOrIgnore([
+        \DB::table('team_members')->insert([
             'id' => 4,
             'name' => "Lilia",
             'title' => "Team Leader",

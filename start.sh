@@ -47,11 +47,11 @@ fi
 
 echo "Database is ready!"
 
-# 5. Run migrations and seed data
-echo "Running database migrations..."
+# 5. Run migrations (includes TRUNCATE + populate 364 initial records)
+echo "Running database migrations (this will reset and populate all data)..."
 php artisan migrate --force --no-interaction
 
-echo "Seeding database..."
+echo "Seeding database (no-op: data is handled by migration)..."
 php artisan db:seed --force --no-interaction || true
 
 # 6. Optimize Laravel (config, routes, views cache)
