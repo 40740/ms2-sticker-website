@@ -19,6 +19,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Force HTTPS URLs in production (behind Render reverse proxy)
+        if ($this->app->environment('production')) {
+            \URL::forceScheme('https');
+        }
+
         // Ensure required storage directories exist (prevents "Please provide a valid cache path" error)
         $dirs = [
             storage_path('framework/cache/data'),
