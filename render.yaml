@@ -55,7 +55,6 @@ services:
     region: oregon
     dockerfilePath: ./Dockerfile.db
     dockerContext: .
-    startCommand: postgres
     envVars:
       - key: POSTGRES_DB
         value: postgres
