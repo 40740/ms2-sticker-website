@@ -2,21 +2,28 @@ services:
   # Web Service
   - type: web
     name: ms2-sticker-website
-    env: docker
+    env: php
     plan: free
-    region: oregon
+    region: oregon  # 或 frankfurt (欧洲)
     branch: main
+    buildCommand: |
+      composer install --no-dev --optimize-autoloader --no-interaction
+      npm install
+      npm run build
+    startCommand: |
+      ./start.sh
     envVars:
-      - key: APP_NAME
-        value: MeisaiPrinting
       - key: APP_ENV
         value: production
       - key: APP_DEBUG
         value: "false"
       - key: APP_KEY
-        value: base64:WdkEuwWcUxx5AmIM8ZKKGrFYltrc9oQmAy72nRJhiHU=
+        generateValue: true
       - key: APP_URL
-        value: https://ms2-sticker-website.onrender.com
+        fromService:
+          type: web
+          name: ms2-sticker-website
+          property: url
       - key: DB_CONNECTION
         value: pgsql
       - key: DB_HOST
@@ -50,9 +57,9 @@ services:
       - key: FILESYSTEM_DISK
         value: public
 
-databases:
-  # PostgreSQL Database (免费套餐: 1GB)
-  - name: ms2-db
+  # PostgreSQL Database
+  - type: pserv
+    name: ms2-db
     plan: free
-    region: oregon
     databaseName: ms2_production
+    region: oregon

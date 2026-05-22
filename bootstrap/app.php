@@ -11,9 +11,6 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        // Trust Render's reverse proxy so Laravel generates HTTPS URLs
-        $middleware->trustProxies(at: '*');
-
         // Security headers for all web requests
         $middleware->web(append: [
             \App\Http\Middleware\SecurityHeaders::class,
