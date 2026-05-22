@@ -1,5 +1,5 @@
 services:
-  # ===== Web Service (Laravel + PHP Docker) =====
+  # ===== Web Service (Laravel + Docker + SQLite) =====
   - type: web
     name: ms2-sticker-website
     env: docker
@@ -19,23 +19,9 @@ services:
       - key: APP_URL
         value: https://ms2-sticker-website.onrender.com
       - key: DB_CONNECTION
-        value: pgsql
-      - key: DB_HOST
-        fromService:
-          type: pserv
-          name: ms2-db
-          property: host
-      - key: DB_PORT
-        fromService:
-          type: pserv
-          name: ms2-db
-          property: port
+        value: sqlite
       - key: DB_DATABASE
-        value: postgres
-      - key: DB_USERNAME
-        value: postgres
-      - key: DB_PASSWORD
-        value: ms2_db_password_render
+        value: /var/www/html/database/render.sqlite
       - key: LOG_CHANNEL
         value: stderr
       - key: CACHE_STORE
@@ -46,21 +32,3 @@ services:
         value: file
       - key: FILESYSTEM_DISK
         value: public
-
-  # ===== PostgreSQL Database (pserv = Persistent Docker Service) =====
-  - type: pserv
-    name: ms2-db
-    env: docker
-    plan: free
-    region: oregon
-    dockerfilePath: ./Dockerfile.db
-    dockerContext: .
-    envVars:
-      - key: POSTGRES_DB
-        value: postgres
-      - key: POSTGRES_USER
-        value: postgres
-      - key: POSTGRES_PASSWORD
-        value: ms2_db_password_render
-      - key: PGDATA
-        value: /var/lib/postgresql/data/pgdata

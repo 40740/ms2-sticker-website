@@ -1,3 +1,0 @@
-FROM postgres:16-alpine
-# Render pserv for PostgreSQL - uses standard postgres image
-# Database, user, and password are set via render.yaml envVars
