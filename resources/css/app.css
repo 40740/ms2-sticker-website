@@ -1,0 +1,192 @@
+@import "tailwindcss";
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+/* ──────────────────────────────────────────────
+   JockeyStickers Design System – Tailwind v4
+   ────────────────────────────────────────────── */
+
+@theme {
+
+    /* ── Fonts ─────────────────────────────────── */
+    --font-body: 'Nunito Sans', 'Muli', ui-sans-serif, system-ui, sans-serif;
+    --font-nav: 'Open Sans', ui-sans-serif, system-ui, sans-serif;
+
+    /* ── Brand Colors ──────────────────────────── */
+    --color-brand: #FF008A;
+    --color-brand-hover: #FF33A1;
+    --color-brand-secondary-hover: #0095F4;
+
+    /* ── Text Colors ───────────────────────────── */
+    --color-body: #333333;
+    --color-box-title: #1D2B36;
+    --color-product-title: #222222;
+
+    /* ── Background Colors ─────────────────────── */
+    --color-bg-body: #FFFFFF;
+    --color-bg-form: #F3F3F3;
+
+    /* ── Footer Colors ─────────────────────────── */
+    --color-footer-bg: #000000;
+    --color-footer-text: #CACACA;
+    --color-footer-title: #FFFFFF;
+    --color-footer-line: #3C405E;
+
+    /* ── Accent / Misc Colors ──────────────────── */
+    --color-accent: #0095F4;
+    --color-dot-active: #C6E53A;
+    --color-dot-inactive: #E6E6E6;
+
+    /* ── Custom Font Sizes ─────────────────────── */
+    --text-hero: 3.375rem;           /* 54px */
+    --text-page-title: 2.5rem;       /* 40px */
+    --text-section: 1.75rem;         /* 28px base for section headings */
+    --text-product: 1.5rem;          /* 24px */
+    --text-feature: 1.25rem;         /* 20px */
+    --text-nav: 1.125rem;            /* 18px */
+    --text-cta: 0.875rem;            /* 14px */
+
+    /* ── Custom Border Radius ──────────────────── */
+    --radius-pill: 35px;
+
+    /* ── Custom Shadows ────────────────────────── */
+    --shadow-light: 0 0 10px rgba(0, 0, 0, 0.12);
+    --shadow-medium: 0 0 20px 5px rgba(0, 0, 0, 0.08);
+
+    /* ── Custom Breakpoints ────────────────────── */
+    --breakpoint-tablet: 62.5rem;    /* 1000px */
+    --breakpoint-mobile: 48rem;      /* 768px */
+
+    /* ── Transition ────────────────────────────── */
+    --ease-brand: all .3s ease;
+}
+
+/* ── Base Styles ──────────────────────────────── */
+
+@layer base {
+    body {
+        font-family: var(--font-body);
+        color: var(--color-body);
+        background-color: var(--color-bg-body);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        font-family: var(--font-body);
+        color: var(--color-box-title);
+    }
+
+    /* Offset main content below fixed header on pages where header is not transparent */
+    .main-with-header-offset {
+        padding-top: var(--header-height, 100px);
+    }
+}
+
+/* ── Reusable Component Classes ───────────────── */
+
+@layer components {
+    /* Primary button – modern rounded rectangle */
+    .btn-primary {
+        background-color: var(--color-brand);
+        color: var(--color-bg-body);
+        border-radius: 8px;
+        padding: 12px 20px;
+        font-size: var(--text-cta);
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        transition: all .3s cubic-bezier(.4,0,.2,1);
+        display: inline-block;
+        text-align: center;
+        cursor: pointer;
+        border: none;
+        text-decoration: none;
+    }
+
+    .btn-primary:hover {
+        background-color: var(--color-brand-hover);
+        box-shadow: 0 4px 14px rgba(255, 0, 138, 0.35);
+        transform: translateY(-1px);
+    }
+
+    .btn-primary:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 6px rgba(255, 0, 138, 0.25);
+    }
+
+    /* Submit button (square) */
+    .btn-submit {
+        background-color: var(--color-brand);
+        color: var(--color-bg-body);
+        border-radius: 0;
+        padding: 12px 20px;
+        font-size: var(--text-cta);
+        font-weight: 600;
+        transition: var(--ease-brand);
+        display: inline-block;
+        text-align: center;
+        cursor: pointer;
+        border: none;
+        text-decoration: none;
+    }
+
+    .btn-submit:hover {
+        background-color: var(--color-brand-hover);
+    }
+
+    /* Nav link styling */
+    .nav-link {
+        font-family: var(--font-nav);
+        font-size: var(--text-nav);
+        font-weight: 600;
+        color: var(--color-body);
+        transition: var(--ease-brand);
+        text-decoration: none;
+    }
+
+    .nav-link:hover {
+        color: var(--color-brand);
+    }
+
+    /* Section heading */
+    .section-heading {
+        font-size: var(--text-section);
+        font-weight: 700;
+        color: var(--color-box-title);
+    }
+
+    /* Product title */
+    .product-title {
+        font-size: var(--text-product);
+        font-weight: 600;
+        color: var(--color-product-title);
+    }
+
+    /* Footer styles */
+    .footer {
+        background-color: var(--color-footer-bg);
+        color: var(--color-footer-text);
+    }
+
+    .footer-title {
+        color: var(--color-footer-title);
+        font-weight: 700;
+    }
+
+    .footer-line {
+        border-color: var(--color-footer-line);
+    }
+
+    /* Carousel dot overrides */
+    .swiper-pagination-bullet {
+        background-color: var(--color-dot-inactive) !important;
+        opacity: 1 !important;
+    }
+
+    .swiper-pagination-bullet-active {
+        background-color: var(--color-dot-active) !important;
+    }
+}

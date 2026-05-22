@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /admin
+Disallow: /search
+Disallow: /inquiry
+Disallow: /newsletter
+
+Sitemap: https://www.meisaiprinting.com/sitemap.xml
