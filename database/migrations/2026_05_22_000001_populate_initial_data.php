@@ -24,7 +24,7 @@ return new class extends Migration
             \DB::statement('PRAGMA foreign_keys = OFF');
         }
 
-        $tables = ['team_members', 'brands', 'certificates', 'blog_posts', 'faqs', 'products', 'categories', 'settings'];
+        $tables = ['users', 'team_members', 'brands', 'certificates', 'blog_posts', 'faqs', 'products', 'categories', 'settings'];
         foreach ($tables as $table) {
             \DB::table($table)->delete();
         }
@@ -6229,6 +6229,21 @@ return new class extends Migration
         ]);
 
         // Done: 58 settings, 36 categories, 182 products, 65 FAQs, 5 blog posts, 8 certificates, 6 brands, 4 team members = 364 total
+
+        // --- admin user (1 record) ---
+        // Use DB::table()->insert() to bypass User model's 'password' => 'hashed' cast
+        // which could double-hash or mishandle the bcrypt output.
+        \DB::table('users')->insert([
+            'id' => 1,
+            'name' => 'Admin',
+            'email' => 'admin@funstickers.com',
+            'password' => password_hash('password', PASSWORD_BCRYPT),
+            'is_admin' => 1,
+            'email_verified_at' => "2026-05-22 10:00:00",
+            'remember_token' => null,
+            'created_at' => "2026-05-22 10:00:00",
+            'updated_at' => "2026-05-22 10:00:00",
+        ]);
     }
 
     public function down(): void
