@@ -58,9 +58,9 @@ services:
       - key: FILESYSTEM_DISK
         value: public
 
+databases:
   # PostgreSQL Database (免费套餐: 1GB)
-  - type: pserv
-    name: ms2-db
+  - name: ms2-db
     plan: free
-    databaseName: ms2_production
     region: oregon
+    databaseName: ms2_production
