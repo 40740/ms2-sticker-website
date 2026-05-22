@@ -6228,7 +6228,7 @@ return new class extends Migration
             'updated_at' => "2026-05-20 10:42:47",
         ]);
 
-        $this->command?->info('Populated 364 initial records.');
+        // Done: 58 settings, 36 categories, 182 products, 65 FAQs, 5 blog posts, 8 certificates, 6 brands, 4 team members = 364 total
     }
 
     public function down(): void
