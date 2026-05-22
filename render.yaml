@@ -1,17 +1,14 @@
 services:
-  # Web Service
+  # ===== Web Service (Laravel + PHP Docker) =====
   - type: web
     name: ms2-sticker-website
-    env: php
+    env: docker
     plan: free
-    region: oregon  # 或 frankfurt (欧洲)
+    region: oregon
     branch: main
-    buildCommand: |
-      composer install --no-dev --optimize-autoloader --no-interaction
-      npm install
-      npm run build
-    startCommand: |
-      ./start.sh
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    numInstances: 1
     envVars:
       - key: APP_ENV
         value: production
@@ -20,33 +17,25 @@ services:
       - key: APP_KEY
         generateValue: true
       - key: APP_URL
-        fromService:
-          type: web
-          name: ms2-sticker-website
-          property: url
+        value: https://ms2-sticker-website.onrender.com
       - key: DB_CONNECTION
         value: pgsql
       - key: DB_HOST
-        fromDatabase:
+        fromService:
+          type: pserv
           name: ms2-db
           property: host
       - key: DB_PORT
-        fromDatabase:
+        fromService:
+          type: pserv
           name: ms2-db
           property: port
       - key: DB_DATABASE
-        fromDatabase:
-          name: ms2-db
-          property: database
         value: postgres
       - key: DB_USERNAME
-        fromDatabase:
-          name: ms2-db
-          property: user
+        value: postgres
       - key: DB_PASSWORD
-        fromDatabase:
-          name: ms2-db
-          property: password
+        value: ms2_db_password_render
       - key: LOG_CHANNEL
         value: stderr
       - key: CACHE_STORE
@@ -58,8 +47,21 @@ services:
       - key: FILESYSTEM_DISK
         value: public
 
-  # PostgreSQL Database
+  # ===== PostgreSQL Database (pserv = Persistent Docker Service) =====
   - type: pserv
     name: ms2-db
+    env: docker
     plan: free
     region: oregon
+    dockerfilePath: ./Dockerfile.db
+    dockerContext: .
+    startCommand: postgres
+    envVars:
+      - key: POSTGRES_DB
+        value: postgres
+      - key: POSTGRES_USER
+        value: postgres
+      - key: POSTGRES_PASSWORD
+        value: ms2_db_password_render
+      - key: PGDATA
+        value: /var/lib/postgresql/data/pgdata
