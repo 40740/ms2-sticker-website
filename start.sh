@@ -24,28 +24,34 @@ php artisan storage:link --no-interaction 2>/dev/null || true
 
 # 4. 等待数据库就绪 (使用 PHP 直接检测连接)
 echo "Waiting for database connection..."
-max_retries=30
-counter=0
-until php -r "
-try {
-    \$pdo = new PDO(
-        'pgsql:host=' . getenv('DB_HOST') . ';port=' . getenv('DB_PORT') . ';dbname=' . getenv('DB_DATABASE'),
-        getenv('DB_USERNAME'),
-        getenv('DB_PASSWORD'),
-        [PDO::ATTR_TIMEOUT => 2]
-    );
-    exit(0);
-} catch (Exception \$e) {
-    exit(1);
-}
-" 2>/dev/null || [ $counter -eq $max_retries ]; do
-    echo "Waiting for database... ($counter/$max_retries)"
-    sleep 2
-    counter=$((counter + 1))
+MAX_RETRIES=30
+COUNTER=0
+DB_READY=0
+
+while [ $COUNTER -lt $MAX_RETRIES ] && [ $DB_READY -eq 0 ]; do
+    php -r '
+        try {
+            $pdo = new PDO(
+                "pgsql:host=" . getenv("DB_HOST") . ";port=" . getenv("DB_PORT") . ";dbname=" . getenv("DB_DATABASE"),
+                getenv("DB_USERNAME"),
+                getenv("DB_PASSWORD"),
+                [PDO::ATTR_TIMEOUT => 2]
+            );
+            echo "connected";
+        } catch (Exception $e) {
+            echo "waiting";
+        }
+    ' 2>/dev/null | grep -q "connected" && DB_READY=1
+
+    if [ $DB_READY -eq 0 ]; then
+        echo "Waiting for database... ($COUNTER/$MAX_RETRIES)"
+        sleep 2
+        COUNTER=$((COUNTER + 1))
+    fi
 done
 
-if [ $counter -eq $max_retries ]; then
-    echo "Database connection failed after $max_retries attempts"
+if [ $DB_READY -eq 0 ]; then
+    echo "Database connection failed after $MAX_RETRIES attempts"
     exit 1
 fi
 
@@ -65,7 +71,8 @@ php artisan config:cache --no-interaction
 php artisan route:cache --no-interaction
 php artisan view:cache --no-interaction
 
-# 8. 启动 PHP 内置服务器，端口由 Render 注入
+# 8. 启动 PHP 内置服务器
+# Render 注入 PORT 环境变量，默认 10000
 PORT_NUM="${PORT:-10000}"
 echo "Starting PHP server on port $PORT_NUM..."
-php artisan serve --host=0.0.0.0 --port="$PORT_NUM"
+php -S 0.0.0.0:$PORT_NUM -t public
