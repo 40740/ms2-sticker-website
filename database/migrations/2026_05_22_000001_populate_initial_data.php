@@ -10,17 +10,28 @@ return new class extends Migration
      * Generated: 2026-05-22 16:44:14
      * Total records: 364 (58 settings, 36 categories, 182 products, 65 FAQs, 5 blog posts, 8 certificates, 6 brands, 4 team members)
      *
-     * Strategy: TRUNCATE all tables first, then INSERT fresh data.
-     * This ensures a clean slate regardless of any pre-existing data (old seeders, previous deploys, etc.).
+     * Strategy: DELETE all rows (SQLite-compatible), then INSERT fresh data.
+     * Works on both SQLite and PostgreSQL.
      * Safe to run multiple times - always results in the same clean dataset.
      */
     public function up(): void
     {
         // ─── STEP 1: Wipe all data tables clean ──────────────────
-        // TRUNCATE resets auto-increment and removes ALL rows.
-        // CASCADE handles foreign key dependencies (PostgreSQL).
-        // Order matters: truncate dependent tables first, then parent tables.
-        \DB::statement('TRUNCATE TABLE team_members, brands, certificates, blog_posts, faqs, products, categories, settings CASCADE');
+        // SQLite doesn't support TRUNCATE; use DELETE FROM instead.
+        // Disable foreign keys temporarily to allow deletion order-independently.
+        $connection = \DB::connection();
+        if ($connection->getDriverName() === 'sqlite') {
+            \DB::statement('PRAGMA foreign_keys = OFF');
+        }
+
+        $tables = ['team_members', 'brands', 'certificates', 'blog_posts', 'faqs', 'products', 'categories', 'settings'];
+        foreach ($tables as $table) {
+            \DB::table($table)->delete();
+        }
+
+        if ($connection->getDriverName() === 'sqlite') {
+            \DB::statement('PRAGMA foreign_keys = ON');
+        }
 
         // --- settings (58 records) ---
         \DB::table('settings')->insert([
