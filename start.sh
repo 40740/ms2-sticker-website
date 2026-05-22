@@ -1,58 +1,66 @@
 #!/usr/bin/env bash
-# Render 启动脚本
+# Render startup script for Laravel
 
 set -e
 
-echo "🚀 Starting Laravel application on Render..."
+echo "Starting Laravel application on Render..."
 
-# 1. 生成 APP_KEY (如果为空)
+# 1. Generate APP_KEY if empty
 if [ -z "$APP_KEY" ]; then
     php artisan key:generate --no-interaction --force
 fi
 
-# 2. 创建 storage 目录 (Render 临时文件系统)
-mkdir -p storage/app/public
-mkdir -p storage/framework/cache
-mkdir -p storage/framework/sessions
-mkdir -p storage/framework/views
-mkdir -p storage/logs
-chmod -R 755 storage
+# 2. Create storage directories (Render uses ephemeral filesystem)
+mkdir -p storage/{app/public,framework/{cache,sessions,views},logs}
+chmod -R 775 storage bootstrap/cache
 
-# 3. 创建 public/storage 软链接
-if [ ! -L public/storage ]; then
-    php artisan storage:link --no-interaction || true
-fi
+# 3. Create public/storage symlink (ignore if already exists)
+php artisan storage:link --no-interaction 2>/dev/null || true
 
-# 4. 等待数据库就绪 (重要！)
-echo "⏳ Waiting for database connection..."
-max_retries=30
-counter=0
-until php artisan db:monitor --timeout=2 --retries=1 2>/dev/null || [ $counter -eq $max_retries ]; do
-    echo "Waiting for database... ($counter/$max_retries)"
-    sleep 2
-    ((counter++))
+# 4. Wait for PostgreSQL to be ready (Render DB may take time)
+echo "Waiting for database connection..."
+MAX_RETRIES=30
+COUNTER=0
+DB_READY=0
+
+while [ $COUNTER -lt $MAX_RETRIES ] && [ $DB_READY -eq 0 ]; do
+    php -r "
+        try {
+            \$pdo = new PDO('pgsql:host=' . getenv('DB_HOST') . ';dbname=' . getenv('DB_DATABASE'), getenv('DB_USERNAME'), getenv('DB_PASSWORD'));
+            echo 'connected';
+        } catch (Exception \$e) {
+            echo 'not_ready';
+        }
+    " 2>/dev/null | grep -q "connected" && DB_READY=1
+
+    if [ $DB_READY -eq 0 ]; then
+        echo "Waiting for database... ($COUNTER/$MAX_RETRIES)"
+        sleep 2
+    fi
+    COUNTER=$((COUNTER + 1))
 done
 
-if [ $counter -eq $max_retries ]; then
-    echo "❌ Database connection failed after $max_retries attempts"
+if [ $DB_READY -eq 0 ]; then
+    echo "ERROR: Database connection failed after $MAX_RETRIES attempts"
     exit 1
 fi
 
-echo "✅ Database is ready!"
+echo "Database is ready!"
 
-# 5. 运行数据库迁移
-echo "🔄 Running database migrations..."
+# 5. Run migrations and seed data
+echo "Running database migrations..."
 php artisan migrate --force --no-interaction
 
-# 6. 优化 Laravel
-echo "⚡ Optimizing Laravel..."
+echo "Seeding database..."
+php artisan db:seed --force --no-interaction || true
+
+# 6. Optimize Laravel (config, routes, views cache)
+echo "Optimizing Laravel..."
 php artisan config:cache --no-interaction
 php artisan route:cache --no-interaction
 php artisan view:cache --no-interaction
 
-# 7. 启动 Nginx + PHP-FPM
-echo "🌐 Starting web server..."
-# Render 使用 Apache (via apt-get install apache2)
-# 但 PHP 内置服务器更简单
-php artisan serve --host=0.0.0.0 --port=${PORT:-80} &
-nginx -g "daemon off;"
+# 7. Start PHP built-in server on Render's assigned port
+PORT_NUM="${PORT:-10000}"
+echo "Starting server on port $PORT_NUM..."
+exec php -S 0.0.0.0:$PORT_NUM -t public
