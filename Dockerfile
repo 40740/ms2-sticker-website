@@ -32,11 +32,10 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction
 RUN npm install && npm run build
 
 # 设置权限
-RUN chmod -R 775 storage bootstrap/cache \
-    && chown -R www-data:www-data storage bootstrap/cache
+RUN chmod -R 775 storage bootstrap/cache
 
-# 暴露端口
+# 暴露端口（Render 注入 PORT 环境变量）
 EXPOSE 10000
 
-# 启动脚本
+# 启动脚本（由 Render 设置 PORT 环境变量）
 CMD ["bash", "start.sh"]

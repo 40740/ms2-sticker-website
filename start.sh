@@ -19,10 +19,8 @@ mkdir -p storage/logs
 chmod -R 775 storage
 chmod -R 775 bootstrap/cache
 
-# 3. 创建 public/storage 软链接
-if [ ! -L public/storage ]; then
-    php artisan storage:link --no-interaction || true
-fi
+# 3. 创建 public/storage 软链接（跳过已存在的）
+php artisan storage:link --no-interaction 2>/dev/null || true
 
 # 4. 等待数据库就绪 (使用 PHP 直接检测连接)
 echo "Waiting for database connection..."
@@ -36,19 +34,18 @@ try {
         getenv('DB_PASSWORD'),
         [PDO::ATTR_TIMEOUT => 2]
     );
-    echo 'connected';
     exit(0);
 } catch (Exception \$e) {
     exit(1);
 }
-" 2>/dev/null || [ \$counter -eq \$max_retries ]; do
-    echo "Waiting for database... (\$counter/\$max_retries)"
+" 2>/dev/null || [ $counter -eq $max_retries ]; do
+    echo "Waiting for database... ($counter/$max_retries)"
     sleep 2
-    ((counter++))
+    counter=$((counter + 1))
 done
 
-if [ \$counter -eq \$max_retries ]; then
-    echo "Database connection failed after \$max_retries attempts"
+if [ $counter -eq $max_retries ]; then
+    echo "Database connection failed after $max_retries attempts"
     exit 1
 fi
 
@@ -68,6 +65,7 @@ php artisan config:cache --no-interaction
 php artisan route:cache --no-interaction
 php artisan view:cache --no-interaction
 
-# 8. 启动 PHP 内置服务器 (Render 免费套餐使用)
-echo "Starting PHP server on port \${PORT:-10000}..."
-php artisan serve --host=0.0.0.0 --port=\${PORT:-10000}
+# 8. 启动 PHP 内置服务器，端口由 Render 注入
+PORT_NUM="${PORT:-10000}"
+echo "Starting PHP server on port $PORT_NUM..."
+php artisan serve --host=0.0.0.0 --port="$PORT_NUM"
