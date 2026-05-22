@@ -209,43 +209,43 @@ class DatabaseSeeder extends Seeder
         }
 
         // ─── Products ──────────────────────────────────────
-
-        $_cat1 = Category::find(1);
-        $_cat2 = Category::find(2);
-        $_cat3 = Category::find(3);
-        $_cat4 = Category::find(4);
-        $_cat5 = Category::find(5);
-        $_cat6 = Category::find(6);
-        $_cat7 = Category::find(7);
-        $_cat8 = Category::find(8);
-        $_cat9 = Category::find(9);
-        $_cat10 = Category::find(10);
-        $_cat11 = Category::find(11);
-        $_cat12 = Category::find(12);
-        $_cat13 = Category::find(13);
-        $_cat14 = Category::find(14);
-        $_cat15 = Category::find(15);
-        $_cat16 = Category::find(16);
-        $_cat17 = Category::find(17);
-        $_cat18 = Category::find(18);
-        $_cat19 = Category::find(19);
-        $_cat20 = Category::find(20);
-        $_cat21 = Category::find(21);
-        $_cat22 = Category::find(22);
-        $_cat23 = Category::find(23);
-        $_cat24 = Category::find(24);
-        $_cat25 = Category::find(25);
-        $_cat26 = Category::find(26);
-        $_cat27 = Category::find(27);
-        $_cat28 = Category::find(28);
-        $_cat29 = Category::find(29);
-        $_cat30 = Category::find(30);
-        $_cat31 = Category::find(31);
-        $_cat32 = Category::find(32);
-        $_cat33 = Category::find(33);
-        $_cat34 = Category::find(34);
-        $_cat35 = Category::find(35);
-        $_cat36 = Category::find(36);
+        // Lookup categories by slug (not by fixed ID) for cross-database compatibility
+        $_cat1 = Category::where('slug', 'die-cut-stickers')->first();
+        $_cat2 = Category::where('slug', 'kiss-cut-stickers')->first();
+        $_cat3 = Category::where('slug', 'sticker-rolls')->first();
+        $_cat4 = Category::where('slug', 'sticker-sheets')->first();
+        $_cat5 = Category::where('slug', 'vinyl-stickers')->first();
+        $_cat6 = Category::where('slug', 'spot-uv-stickers')->first();
+        $_cat7 = Category::where('slug', 'foil-stickers')->first();
+        $_cat8 = Category::where('slug', 'transparent-stickers')->first();
+        $_cat9 = Category::where('slug', 'holographic-stickers')->first();
+        $_cat10 = Category::where('slug', 'glitter-stickers')->first();
+        $_cat11 = Category::where('slug', 'glossy-stickers')->first();
+        $_cat12 = Category::where('slug', 'circle-stickers')->first();
+        $_cat13 = Category::where('slug', 'rectangle-stickers')->first();
+        $_cat14 = Category::where('slug', 'square-stickers')->first();
+        $_cat15 = Category::where('slug', 'oval-stickers')->first();
+        $_cat16 = Category::where('slug', 'bottle-stickers')->first();
+        $_cat17 = Category::where('slug', 'logo-stickers')->first();
+        $_cat18 = Category::where('slug', 'outdoor-stickers')->first();
+        $_cat19 = Category::where('slug', 'custom-shape-stickers')->first();
+        $_cat20 = Category::where('slug', 'juice-bottle-labels')->first();
+        $_cat21 = Category::where('slug', 'candle-labels')->first();
+        $_cat22 = Category::where('slug', 'honey-jar-labels')->first();
+        $_cat23 = Category::where('slug', 'labels-on-roll')->first();
+        $_cat24 = Category::where('slug', 'food-labels')->first();
+        $_cat25 = Category::where('slug', 'seal-labels')->first();
+        $_cat26 = Category::where('slug', 'brewery-labels')->first();
+        $_cat27 = Category::where('slug', 'cosmetic-labels')->first();
+        $_cat28 = Category::where('slug', 'food-beverage-labels')->first();
+        $_cat29 = Category::where('slug', 'pharma-labels')->first();
+        $_cat30 = Category::where('slug', 'cannabis-labels')->first();
+        $_cat31 = Category::where('slug', 'amazon-labels')->first();
+        $_cat32 = Category::where('slug', 'pet-labels')->first();
+        $_cat33 = Category::where('slug', 'pp-labels')->first();
+        $_cat34 = Category::where('slug', 'kraft-labels')->first();
+        $_cat35 = Category::where('slug', 'foil-labels')->first();
+        $_cat36 = Category::where('slug', 'transparent-labels')->first();
 
         // Product 1: Holographic Stickers
         Product::updateOrCreate(['slug' => 'holographic-stickers'], [
